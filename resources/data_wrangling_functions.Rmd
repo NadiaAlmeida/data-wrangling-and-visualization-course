@@ -138,7 +138,7 @@ Useful arguments:
 
 ```{r}
 
-# dplyr::filter()
+# dplyr::filter() -> is for rows so left right 
 
 ```
 
@@ -161,7 +161,7 @@ slice(mtcars, 2:n()) # this should have 31 rows
 
 ```{r}
 
-# dplyr::select()
+# dplyr::select() ->is for columns so up down 
 
 ```
 
@@ -169,7 +169,7 @@ slice(mtcars, 2:n()) # this should have 31 rows
 
 ```{r}
 
-# dplyr::rename()
+# dplyr::rename() -> (new name = name in file)
 
 ```
 

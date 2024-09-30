@@ -22,8 +22,11 @@ knitr::opts_chunk$set(message = FALSE,
 # Dependencies
 
 ```{r}
+install.packages("readr")
+install.packages("janitor")
+install.packages("stringr")
 
-library(dplyr)
+library(dplyr) # ?dplyr gives you the information 
 library(tidyr)
 library(readr)
 library(janitor) # for clean_names()
@@ -36,7 +39,8 @@ library(stringr)
 ```{r}
 
 # demographics
-data_demographics_raw_messy <- read_csv("../data/raw/data_demographics_raw_messy.csv", skip = 2) |>
+data_demographics_raw_messy <- 
+  read_csv("../data/raw/data_demographics_raw_messy.csv", skip = 2) |>
   janitor::clean_names()
 
 data_demographics_raw <- read_csv("../data/raw/data_demographics_raw.csv") |>
@@ -58,8 +62,51 @@ Clean the demographics data so that summaries of age and gender can be made in t
 
 ```{r}
 
-#dat_age_gender <- data_demographics_raw 
+# %>% tidyverse one -> control +shift+ m 
 
+# |# > base R version -> pipe adds every code assigned to the same data set, treats output of one as the input of the other
+
+# dat_age_gender <- data_demographics_raw |> select(subject, trialcode, response) #select puts only the columns that you specify 
+
+dat_age_gender <- data_demographics_raw |> 
+  rename(unique_id = subject, item = trialcode) |>
+  select(unique_id, item, response)
+
+# temp <- dat_age_gender |>
+  #filter(item == "age") #no object sondern string that's why "age" and not just age
+
+# there are much more felxible ways of doing 'string matching?
+# temp <- dat_age_gender |>
+  #filter(item %in% c("age", "AGE", "Age"))
+
+# | #or operator
+# & # and operator
+
+
+dat_age_gender <- data_demographics_raw |> 
+  rename(unique_id = subject, item = trialcode) |> #rename for clarity
+  select(unique_id, item, response) |> #select useful columns
+  filter(item == "age") #only show "age" rows of the "item" column
+
+temp <- dat_age_gender |>
+  distinct(response) # to show the unique responses
+
+temp2 <- dat_age_gender |>
+  mutate(response =str_remove_all(response, "\\D"))  #create or change variables
+
+#check data type for each column 
+ sapply(dat_age_gender, class)
+ 
+ dat_age_gender <- data_demographics_raw |> 
+  rename(unique_id = subject, item = trialcode) |> #rename for clarity
+  select(unique_id, item, response) |> #select useful columns
+  filter(item == "age") |>
+  mutate(response =str_remove_all(response, "\\D"), 
+         response = na_if(response, ""),
+         response = as.numeric(response)) 
+ 
+ #create modified data for gender 
+ 
 ```
 
 # Exclusions / data quality
