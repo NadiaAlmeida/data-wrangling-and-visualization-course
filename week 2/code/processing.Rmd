@@ -101,11 +101,23 @@ temp2 <- dat_age_gender |>
   rename(unique_id = subject, item = trialcode) |> #rename for clarity
   select(unique_id, item, response) |> #select useful columns
   filter(item == "age") |>
-  mutate(response =str_remove_all(response, "\\D"), 
+  mutate(response = str_remove_all(response, "\\D"), 
          response = na_if(response, ""),
          response = as.numeric(response)) 
  
  #create modified data for gender 
+ dat_g_temp <- data_demographics_raw |>
+   rename(unique_id = subject, item = trialcode) |>
+   select(unique_id, item, response) |>
+   filter(item == "gender") |>
+   mutate(response = str_remove_all(response, "\\d"),
+          response = na_if(response, ""),
+          response = as.factor(response),
+          response = case_when(
+            tolower(response) %in% c("Male", "male", "MALE") ~ "male",
+            tolower(response) %in% c("Female", "female", "FEMALE", "woman", "Woman") ~ "female",
+            tolower(response) %in% c("non-binary", "non binary", "Non-Binary", "Non Binary") ~ "non-binary"))
+ 
  
 ```
 

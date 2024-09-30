@@ -112,7 +112,7 @@ Useful arguments:
 
 ```{r}
 
-# %>%
+# %>% uses output of a line as the input of the next line
 
 # |>
 
