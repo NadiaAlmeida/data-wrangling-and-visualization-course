@@ -201,7 +201,7 @@ slice(mtcars, 2:n()) # this should have 31 rows
 
 ```{r}
 
-# dplyr::count()
+# dplyr::count() # gives you the ammount of each response
 
 ```
 
@@ -209,7 +209,7 @@ slice(mtcars, 2:n()) # this should have 31 rows
 
 ```{r}
 
-# dplyr::distinct()
+# dplyr::distinct() # gives you every response that there is so that you know all answer types
 
 ```
 
@@ -303,6 +303,23 @@ slice(mtcars, 2:n()) # this should have 31 rows
 #   knitr::kable() |> # print a nicer looking table
 #   kableExtra::kable_classic(full_width = FALSE) # print nicer again
 
+```
+
+# multiline putting # 
+
+```{r}
+# asrgarg
+# argsarg.   #command shift c
+# sgdg
+```
+
+#multiline typing
+
+```{r}
+#option and drag with mouse
+# skfhk aseflasef
+# skfhk aseflasef
+# skfhk aseflasef
 ```
 
 # Other packages 

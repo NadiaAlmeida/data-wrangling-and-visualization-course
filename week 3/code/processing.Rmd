@@ -66,7 +66,7 @@ dat_age <- data_demographics_raw |>
   select(unique_id, item, response) |>
   # retain rows that we need
   filter(item == "age") |>
-  rename(age = response) |>
+  rename(age = response) |> #new name = old name
   # remove non-numbers or decimals from age
   mutate(age = str_remove_all(age, "[^\\d.]"),  # retains only digits and decimal points
          age = na_if(age, ""),
@@ -86,10 +86,45 @@ dat_gender <- data_demographics_raw |>
   # remove non-numbers or decimals from age
   mutate(gender = str_to_lower(gender),
          gender = str_remove_all(gender, "[\\d.]"),
-         gender = na_if(gender, "")) |>
-  select(unique_id, gender)
+         gender = na_if(gender, ""),
   #select(-item) # alternative: negative selection
+  #mutate(gender = replace(gender, !(gender %in% c("men", "woman", "male", "female",
+                                      # "non-binary", "non binary")), NA_character_)) 
+    gender = case_when(gender == "woman" ~ "female",
+                            gender == "man" ~ "male",
+                            gender == "girl" ~ "female",
+                            gender == "boy" ~ "male",
+                            gender == "dude" ~ "male",
+                            gender == "non binary" ~ "non-binary",
+                            gender == "yes" ~ NA_character_, 
+                            TRUE ~ gender)) |>
+  select(unique_id, gender) 
 
+dat_gender |>
+  distinct(gender) #um alle responses zu sehen
+
+dat_gender |>
+  count(gender)
+#do we have duplicate data?
+data_demographics_raw |>
+  count(subject) |>
+  arrange(desc(n))
+
+# yes - n is different for some subjects
+
+dat_unique_id <- data_demographics_raw |>
+  filter(subject !="246532124	")
+  filter(gender %in% c("male", "female", "non-binary"))
+
+ 
+ 
+data_age_gender_temp <- 
+  bind_cols(dat_age, dat_gender) #just puts both next to each other but if the id is in a different order then you're f****
+
+data_age_gender <- 
+  full_join(dat_age,
+            dat_gender,
+            by = "unique_id") #correctly joins the rows to the right id 
 ```
 
 - in class: how to merge categories of "woman" and "female"?
